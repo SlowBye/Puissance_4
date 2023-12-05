@@ -26,7 +26,7 @@ Sujet:
 
     Cas du match nul : La grille est complète, aucun gagnant, le jeu s'arrête 
 
-    Reverse, si les deuxj oueurs gagne => match nul ccx
+    Reverse, si les deux joueurs gagne => match nul ccx
     Rendu: 08/12/2023 
 
     Bonus: 
