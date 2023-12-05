@@ -14,7 +14,7 @@ function Game()
             {gagne === false ?
                 (<span>Joueur actuel : {joueurActuel}</span>)
                 :
-                (<span>La couleur {joueurActuel} a gagné.</span>)}
+                (<span>{joueurActuel} a gagné.</span>)}
             <div className={'board'}>
                 <div>
                     {createCase(0)}
@@ -81,21 +81,24 @@ function Game()
         const ligne = getEmptyRow(col);
       
         if (coupPossible(ligne)) {
-          const newTab = [...tableau];
-          newTab[ligne] = joueurActuel === 'rouge' ? 'rouge' : 'jaune';
-          const randomChance = Math.random() * 100;
+            const newTab = [...tableau];
+            newTab[ligne] = joueurActuel === 'rouge' ? 'rouge' : 'jaune';
+            const randomChance = Math.random() * 100;
             if (randomChance <= 50) {
                 // reverseColumn(col); // Appel de la fonction pour inverser la colonne
             }
           updateTableau(newTab);
           updateHistorique(historique.concat([newTab]));
           updateCoupActuel(coupActuel + 1);
-          
           if (win(newTab)) {
             updateGagne(true);
           } else {
             joueurActuel === 'rouge' ? updateJoueurActuel('jaune') : updateJoueurActuel('rouge');
           }
+          if (egalité(newTab)) {
+            updateGagne(true);
+            updateJoueurActuel('Personne n\'');
+        }
         }
       }
       
@@ -193,6 +196,9 @@ function Game()
         updateTableau(Array(42).fill('blanc'))
     }
 
+    function egalité(tab) {
+        return tab.every(cell => cell !== 'blanc');
+    }
     // function reverseColumn(colIndex) {
     //     const newTab = [...tableau]; // Créez une nouvelle copie du tableau
       
