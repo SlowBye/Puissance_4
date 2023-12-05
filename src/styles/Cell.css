@@ -1,0 +1,29 @@
+.cellule
+{
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    padding:5px;
+    background-color: white;
+}
+
+
+.jouable
+{
+    background-color: lightgrey;
+}
+
+.jouable:hover
+{
+    opacity : 0.9;
+}
+
+.jaune
+{
+    background-color: yellow;
+}
+
+.rouge
+{
+    background-color: red;
+}
