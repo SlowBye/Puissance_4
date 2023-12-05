@@ -31,7 +31,7 @@ Sujet:
 
     Bonus: 
     Reverse d'une colonne
-    Reverse de colonne : la gravité se réapllique
+    Reverse de colonne : la gravité se réaplique
     Bonus 2: 
     Random sur le reverse d'une colonne 
     Bonus 3: 
