@@ -3,11 +3,11 @@ import '../styles/Game.css'
 import {useState} from "react";
 
 function Game()
-{
+{   
+    const [refreshCount, setRefreshCount] = useState(0);
     const [joueurActuel, updateJoueurActuel] = useState('rouge')
     const [gagne, updateGagne] = useState(false)
     const [tableau, updateTableau] = useState(Array(42).fill('blanc'))
-    const [historique, updateHistorique] = useState([Array(42).fill('blanc')])
     const [coupActuel, updateCoupActuel] = useState(0)
     return(
         <div className={'game'}>
@@ -15,7 +15,7 @@ function Game()
                 (<span>Joueur actuel : {joueurActuel}</span>)
                 :
                 (<span>{joueurActuel} a gagné.</span>)}
-            <div className={'board'}>
+            <div key={refreshCount} className={'board'}>
                 <div>
                     {createCase(0)}
                     {createCase(1)}
@@ -81,24 +81,28 @@ function Game()
         const ligne = getEmptyRow(col);
       
         if (coupPossible(ligne)) {
-            const newTab = [...tableau];
+            let newTab = [...tableau];
             newTab[ligne] = joueurActuel === 'rouge' ? 'rouge' : 'jaune';
             const randomChance = Math.random() * 100;
-            if (randomChance <= 50) {
-                // reverseColumn(col); // Appel de la fonction pour inverser la colonne
+            if(process.env.NODE_ENV !== 'test'){
+                if (randomChance <= 10) {
+                    const random = Math.floor(Math.random() * 7);
+                    const updatedTableau = reverseColumn(random, newTab);
+                    updateTableau(updatedTableau);
+                    setRefreshCount(refreshCount + 1);
+                }
             }
-          updateTableau(newTab);
-          updateHistorique(historique.concat([newTab]));
-          updateCoupActuel(coupActuel + 1);
-          if (win(newTab)) {
-            updateGagne(true);
-          } else {
-            joueurActuel === 'rouge' ? updateJoueurActuel('jaune') : updateJoueurActuel('rouge');
-          }
-          if (egalité(newTab)) {
-            updateGagne(true);
-            updateJoueurActuel('Personne n\'');
-        }
+            updateTableau(newTab);
+            updateCoupActuel(coupActuel + 1);
+            if (win(newTab)) {
+                updateGagne(true);
+            } else {
+                joueurActuel === 'rouge' ? updateJoueurActuel('jaune') : updateJoueurActuel('rouge');
+            }
+            if (egalité(newTab)) {
+                updateGagne(true);
+                updateJoueurActuel('Personne n\'');
+            }
         }
       }
       
@@ -118,7 +122,7 @@ function Game()
     function createCase(indice)
     {
         const couleurCase = tableau[indice];
-        return (<Cell id={indice} data={`cell-${indice}`}  key = {indice} onClick = {()=>updateGame(indice)} couleur = {couleurCase} jouable = {coupPossible(indice) && !gagne} gagne = {gagne}/>)
+        return (<Cell id={indice} data={`cell-${indice}`} key={`${indice}-${refreshCount}`}  onClick = {()=>updateGame(indice)} couleur = {couleurCase} jouable = {coupPossible(indice) && !gagne} gagne = {gagne}/>)
     }
 
     function win(tab)
@@ -199,28 +203,29 @@ function Game()
     function egalité(tab) {
         return tab.every(cell => cell !== 'blanc');
     }
-    // function reverseColumn(colIndex) {
-    //     const newTab = [...tableau]; // Créez une nouvelle copie du tableau
-      
-    //     console.log("newTab avant inversion :", newTab); // Ajout d'un point de contrôle
-      
-    //     const col = [];
-    //     for (let i = colIndex; i < tableau.length; i += 7) {
-    //       col.push(tableau[i]);
-    //     }
-      
-    //     col.reverse();
-      
-    //     console.log("col inversée :", col); // Ajout d'un point de contrôle
-      
-    //     for (let i = colIndex, j = 0; i < tableau.length; i += 7, j++) {
-    //       newTab[i] = col[j]; // Mettez à jour la nouvelle copie du tableau
-    //     }
-      
-    //     console.log("newTab après inversion :", newTab); // Ajout d'un point de contrôle
-      
-    //     updateTableau(newTab); // Mettez à jour l'état du tableau avec la nouvelle copie
-    //   }
+
+    function reverseColumn(col, newTableau) {
+        const column = [];
+        for (let i = 0; i < 6; i++) {
+            column.push(newTableau[i * 7 + col]);
+        }
+        column.reverse();
+        const sortedColumn = [];
+        for (let i = 0; i < 6; i++) {
+            if (column[i] !== 'blanc') {
+                sortedColumn.push(column[i]);
+            }
+        }
+        const blancCount = 6 - sortedColumn.length;
+        for (let i = 0; i < blancCount; i++) {
+            sortedColumn.unshift('blanc');
+        }
+
+        for (let i = 0; i < 6; i++) {
+            newTableau[i * 7 + col] = sortedColumn[i];
+        }
+        return newTableau;
+    }
 }
 
 export default Game;

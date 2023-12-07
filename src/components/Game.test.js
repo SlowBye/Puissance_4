@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, fireEvent,waitFor,cleanup,queryAllByText  } from '@testing-library/react';
+import { render, fireEvent,waitFor,cleanup  } from '@testing-library/react';
 import Game from './Game';
+process.env.NODE_ENV = 'test';
 
 test('affiche le message du joueur actuel', () => {
   const { getByText } = render(<Game />);
@@ -99,8 +100,9 @@ afterEach(cleanup);
 
 // test("Egalité", async () => {
 //   const { getByTestId, queryAllByText } = render(<Game />);
-//   const rouge = [];
-//   const jaune = [];
+//   const rouge = [41,34,26,19,13,6]; [39,32,25,18,12,5]; [37,30,23,16,10,3] 
+//   const jaune = [40,33,27,20,14,7]; [38,31,24,17,11,4]; [36,29,22,15,9,2] 
+
 
 //   for (let i = 0; i < tab2.length; i++) {
 //     const cell = getByTestId(`cell-${tab[i]}`);

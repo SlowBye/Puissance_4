@@ -32,9 +32,12 @@ Sujet:
     Bonus: 
     Reverse d'une colonne
     Reverse de colonne : la gravité se réaplique
+
     Bonus 2: 
     Random sur le reverse d'une colonne 
+
     Bonus 3: 
     Limiter le nombre de reverse possible
+    
     Bonus 4: 
     Multijoueur 
